@@ -8,11 +8,13 @@ Apollo基础模型：
 - 配置中心通知Apolllo客户端有配置更新
 - Apollo客户端从配置中心拉取最新的配置、更新本地配置并通知到应用
 
-![Apollo基础模型png](../../../../typora图片/Apollo部署及整合SpringBoot实战/Apollo基础模型png.png)
+![Apollo基础模型](images/Apollo基础模型.png)
 
 Apollo对比Spring Cloud Config：
 
-![Apollo对比SpringCloudConfig](../../../../typora图片/Apollo部署及整合SpringBoot实战/Apollo对比SpringCloudConfig.png)
+![Apollo对比SpringCloudConfig](images/Apollo对比SpringCloudConfig.png)
+
+
 
 # 二、修改配置
 
@@ -27,7 +29,7 @@ Apollo对比Spring Cloud Config：
 - apollo-portal：提供Web界面供用户管理配置
 - apollo-client：Apollo提供的客户端程序，为应用提供配置获取、实时更新等功能
 
-![流程图](../../../../typora图片/Apollo部署及整合SpringBoot实战/流程图.png)
+![流程图](images/流程图.png)
 
 配置发布的大致过程：用户在Portal操作配置发布，Portal调用Admin Service的接口操作发布，Admin Service发布配置后，发送ReleaseMessage给各个Config Service，Config Service收到ReleaseMessage后，通知对应的客户端
 
@@ -75,6 +77,8 @@ $ ./build.sh
 ```
 
 该脚本会依次打包apollo-configservice, apollo-adminservice, apollo-portal和apollo-client
+
+
 
 # 三、部署
 
@@ -130,6 +134,8 @@ nohup ./startup.sh &
 
 默认用户名密码为：apollo/admin
 
+
+
 # 四、SpringBoot整合使用Apollo配置中心
 
 **1）、添加Apollo依赖**
@@ -164,7 +170,70 @@ apollo:
 
 **3）、主启动类上使用@EnableApolloConfig注解标注**
 
+```java
+//启用Apollo配置中心
+@EnableApolloConfig
+@SpringBootApplication
+@EnableEurekaClient
+@EnableFeignClients(basePackages = { "com.hand.shop" })
+public class ShopWebApplication {
 
+	public static void main(String[] args) {
+		SpringApplication.run(ShopWebApplication.class, args);
+	}
+
+}
+```
+Apollo中的配置信息如下：最重要的是AppId要和application.yml中配置的app.id相对应
+
+![Apollo中的配置](images/Apollo中的配置.png)
+
+
+
+# 五、创建Namespace
+
+使用Apollo的过程中如果不同的项目存在相同配置信息，如何把共有的配置信息提取出来共用，使用公共的Namespace可以解决这个问题的，新建公共的Namespace存放公共配置，另一个项目再关联这个Namespace就可以共用配置信息了
+
+
+**1）、最好新建一个独立的项目用来存储共用配置信息，创建Namespace**
+
+Common项目：
+
+![添加Namespace](images/添加Namespace.png)
+
+![创建Namespace](images/创建Namespace.png)
+**2）、公共Namespace添加配置信息并发布**
+
+Common项目：
+
+![公共Namespace添加配置](images/公共Namespace添加配置.png)
+
+**3）、另一个项目关联这个Namespace来共用配置了**
+
+SimpleProject项目：
+
+![关联公共Namespace](images/关联公共Namespace.png)
+
+提交之后效果如下：
+
+![关联成功后](images/关联成功后.png)
+
+**5）、修改项目中的配置信息**
+
+```yml
+app:
+  id: SimpleProject
+apollo:
+  meta: http://192.168.126.147:8080/
+  bootstrap:
+    enabled: true
+    namespaces: application,common
+```
+项目存在多个Namespace时，需要显示指定apollo.bootstrap.namespaces配置信息，每个Namespace之间用`,`隔开
+
+
+
+Namespace详解：https://github.com/ctripcorp/apollo/wiki/Apollo%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B9%8B%E2%80%9CNamespace%E2%80%9D
 
 参考：https://blog.csdn.net/z960339491/article/details/80667559
 
