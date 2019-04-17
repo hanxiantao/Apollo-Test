@@ -234,7 +234,3 @@ apollo:
 
 
 Namespace详解：https://github.com/ctripcorp/apollo/wiki/Apollo%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B9%8B%E2%80%9CNamespace%E2%80%9D
-
-参考：https://blog.csdn.net/z960339491/article/details/80667559
-
-https://blog.csdn.net/m0_37367413/article/details/84074715
