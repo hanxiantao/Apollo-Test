@@ -233,7 +233,7 @@ apollo:
 
 
 
-**Namespace详解：**https://github.com/ctripcorp/apollo/wiki/Apollo%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B9%8B%E2%80%9CNamespace%E2%80%9D
+**Namespace详解**：https://github.com/ctripcorp/apollo/wiki/Apollo%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B9%8B%E2%80%9CNamespace%E2%80%9D
 
-**CSDN地址：**https://blog.csdn.net/qq_40378034/article/details/87925546
+**CSDN地址**：https://blog.csdn.net/qq_40378034/article/details/87925546
 
